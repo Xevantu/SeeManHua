@@ -13,7 +13,7 @@ namespace SeeManHua
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             App.Main();
         }
-
+        //Test File
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
