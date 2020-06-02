@@ -33,6 +33,16 @@ namespace SeeManHua
             Height = 100,
             Width = 300
         };
+        readonly static Size_m SearchBarSize = new Size_m
+        {
+            Height = 25,
+            Width = 375
+        };
+        readonly static Size_m SearchIconSize = new Size_m
+        {
+            Height = 25,
+            Width = 25
+        };
         public MainWindow()
         {
             InitializeComponent();
@@ -48,6 +58,7 @@ namespace SeeManHua
             SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             #region 搜尋動作及結果
+            LayoutSetting(LayoutMode.RL, Image_searchIcon, TextBox_search, "");
             //載入網址資料
             HtmlDocument doc = webClient.Load("https://www.manhuaren.com/search?title=%E8%BC%9D%E5%A4%9Ca%E6%97%A5&language=1");
             //lb_html.Content = doc.Text;   //確認是否有抓到html代碼
@@ -76,46 +87,106 @@ namespace SeeManHua
                 Thread.Sleep(5);
                 strManHuaName = list[cnt].SelectSingleNode("div[2]/a/p[1]").InnerText;
                 strManHuaIntro = list[cnt].SelectSingleNode("div[2]/a/p[2]").InnerText;
-                List_manhuaGrid.Add(LayoutListSetting(-1, img, strManHuaName, strManHuaIntro));
-            }
-            //將漫畫清單放到卷軸中
-            for (int i = 0; i < List_manhuaGrid.Count; i++)
-            {
-                //List_manhuaGrid[i].Margin = new Thickness(0, 0, 0, 0.1);
-
+                List_manhuaGrid.Add(LayoutSetting(LayoutMode.LR, img, strManHuaName + "/n" + strManHuaIntro));
             }
 
             //設定列表排版
             ListBox_manhua.HorizontalAlignment = HorizontalAlignment.Left;
-            ListBox_manhua.Margin = new Thickness(0);
+            ListBox_manhua.Margin = new Thickness(0, SearchBarSize.Height, 0, 0);
             ListBox_manhua.Width = CoverSize.Width + IntroSize.Width;
             //加入抓到的清單
             ListBox_manhua.ItemsSource = List_manhuaGrid;
+            Grid_manhua_menu.Margin = new Thickness(0);
+            Grid_manhua_menu.Width = SearchBarSize.Width + SearchIconSize.Width;
+            //Grid_manhua_menu.Children.Add(ListBox_manhua);
             #endregion
         }
-
-        public Grid LayoutListSetting(int mode, Image rImg, string name, string introduction)
+        /// <summary>搜尋列。
+        /// <para>僅負責設定排版位置，參數引進之前須設定好大小、顏色等等所需內容。</para>
+        /// </summary>
+        /// <param name="mode">排版模式</param>
+        /// <param name="img">圖片</param>
+        /// <param name="str">文字框提示文字</param>
+        /// <returns></returns>
+        public Grid LayoutSetting(LayoutMode mode, Image img, TextBox textBox, string str)
         {
             Grid grid = new Grid();
             Label label = new Label();
-            Image img = rImg;
             switch (mode)
             {
-                case 0:
+                case LayoutMode.LR:
+                    textBox.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox.VerticalAlignment = VerticalAlignment.Center;
+                    textBox.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+                    textBox.Margin = new Thickness(2);
+                    textBox.Width = SearchBarSize.Width;
+                    textBox.Height = SearchBarSize.Height;
+                    img.HorizontalAlignment = HorizontalAlignment.Left;
+                    img.VerticalAlignment = VerticalAlignment.Center;
+                    img.Margin = new Thickness(textBox.Margin.Left + textBox.Width, textBox.Margin.Top, 0, 0);
+                    img.Width = SearchIconSize.Width;
+                    img.Height = SearchIconSize.Height;
+                    grid.HorizontalAlignment = HorizontalAlignment.Right;
+                    grid.VerticalAlignment = VerticalAlignment.Top;
+                    grid.Margin = new Thickness(0);
+                    grid.Width = img.Width + textBox.Width;
+                    grid.Height = img.Height;
+                    grid.Background = new SolidColorBrush(Color.FromArgb(100, 43, 43, 43));
+                    grid.Children.Add(textBox);
+                    grid.Children.Add(img);
+                    break;
+                case LayoutMode.RL:
+                    textBox.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox.VerticalAlignment = VerticalAlignment.Top;
+                    textBox.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+                    textBox.Margin = new Thickness(2);
+                    textBox.Width = SearchBarSize.Width;
+                    textBox.Height = SearchBarSize.Height;
+                    img.HorizontalAlignment = HorizontalAlignment.Left;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+                    img.Margin = new Thickness(textBox.Margin.Left + textBox.Width, textBox.Margin.Top, 0, 0);
+                    img.Width = SearchIconSize.Width;
+                    img.Height = SearchIconSize.Height;
+                    grid.HorizontalAlignment = HorizontalAlignment.Right;
+                    grid.VerticalAlignment = VerticalAlignment.Top;
+                    grid.Margin = new Thickness(0);
+                    grid.Width = img.Width + textBox.Width;
+                    grid.Height = img.Height;
+                    grid.Background = new SolidColorBrush(Color.FromArgb(100, 43, 43, 43));
+                    //grid.Children.Add(textBox);
+                    //grid.Children.Add(img);
                     break;
                 default:
-                    label.Content = name + "\n" + introduction;
-                    //設置元件位置
+
+                    break;
+            }
+            return grid;
+        }
+        /// <summary>圖片、描述
+        /// <para>僅負責設定排版位置，參數引進之前須設定好大小、顏色等等所需內容。</para>
+        /// </summary>
+        /// <param name="mode">排版模式</param>
+        /// <param name="img">圖片</param>
+        /// <param name="str">描述/ 內容</param>
+        /// <returns>包裝好排版的Grid.</returns>
+        public Grid LayoutSetting(LayoutMode mode, Image img, string str)
+        {
+            Grid grid = new Grid();
+            Label label = new Label();
+            switch (mode)
+            {
+                case LayoutMode.LR:
                     img.HorizontalAlignment = HorizontalAlignment.Left;
                     img.VerticalAlignment = VerticalAlignment.Center;
                     img.Margin = new Thickness(2);
                     img.Width = CoverSize.Width;
                     img.Height = CoverSize.Height;
+                    label.Content = str;
                     label.HorizontalAlignment = HorizontalAlignment.Left;
                     label.VerticalAlignment = VerticalAlignment.Center;
                     label.HorizontalContentAlignment = HorizontalAlignment.Left;
                     label.VerticalContentAlignment = VerticalAlignment.Center;
-                    label.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(100, 255, 255, 255));
+                    label.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
                     label.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
                     label.Width = IntroSize.Width;
                     label.Height = IntroSize.Height;
@@ -124,18 +195,41 @@ namespace SeeManHua
                     grid.Margin = new Thickness(-5);
                     grid.Width = img.Width + label.Width;
                     grid.Height = img.Height;
-                    grid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(100, 43, 43, 43));
+                    grid.Background = new SolidColorBrush(Color.FromArgb(100, 43, 43, 43));
                     grid.Children.Add(img);
                     grid.Children.Add(label);
+                    break;
+                default:
+
                     break;
             }
             return grid;
         }
+        /// <summary>
+        /// 依照引數的順序，選擇mode排列。
+        /// </summary>
+        public enum LayoutMode
+        {
+            /* Image=   Im
+             * Label=   La
+             * TextBox= Tb
+             * Left=    L
+             * Right=   R
+             * 
+            */
+            /// <summary>
+            /// 1左2右
+            /// </summary>
+            LR,
+            /// <summary>
+            /// 1右2左
+            /// </summary>
+            RL
+        }
 
         private void Main_szChange(object sender, SizeChangedEventArgs e)
         {
-
-            ListBox_manhua.Height = main_bg.Height;
+            
         }
     }
 }

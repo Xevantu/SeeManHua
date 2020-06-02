@@ -69,6 +69,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FunctionSearch.cs" />
+    <Compile Include="LayoutSearch.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -101,6 +103,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\SearchIcon%28white%29.png" />
+    <EmbeddedResource Include="resource\SearchIcon%28black%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="1589204440988.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="FunctionPlan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
