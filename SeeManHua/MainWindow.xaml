@@ -8,10 +8,10 @@
         Background="#FF2B2B2B"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="main_bg" Margin="0,0,0,0" SizeChanged="Main_szChange" Background="#FF2B2B2B" HorizontalAlignment="Left" >
-        <Grid x:Name="Grid_manhua_menu" Margin="0,0,656,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-            <Image x:Name="Image_searchIcon" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="25" Source="1589204440988.jpg" Margin="0,0,0,0" OpacityMask="#FFB81111"/>
-            <TextBox x:Name="TextBox_search" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
-            <ListBox x:Name="ListBox_manhua" Margin="0,0,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="{x:Null}" Foreground="White"/>
+        <Grid x:Name="Grid_manhua_menu" Margin="-71,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Height="212" >
+            <TextBox x:Name="TextBox_search" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Foreground="{x:Null}" BorderThickness="0" SpellCheck.IsEnabled="True" FontSize="14" FontFamily="MS Reference Sans Serif" Width="34" Margin="0" VerticalContentAlignment="Center" Opacity="0.4" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" ToolTip="搜尋漫畫..." PreviewKeyUp="SearchBar_key_pup"/>
+            <Image x:Name="Image_searchIcon" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="23" Source="1589204440988.jpg" OpacityMask="#FFB81111" Margin="32,0,0,0"/>
+            <ListBox x:Name="ListBox_manhua" Margin="0,23,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="{x:Null}" Foreground="White" RenderTransformOrigin="0.485,0.504"/>
         </Grid>
     </Grid>
 </Window>

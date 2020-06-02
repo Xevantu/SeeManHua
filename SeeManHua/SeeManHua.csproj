@@ -114,6 +114,10 @@
   <ItemGroup>
     <Resource Include="FunctionPlan.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\搜尋%28白%29.png" />
+    <EmbeddedResource Include="resource\搜尋%28黑%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

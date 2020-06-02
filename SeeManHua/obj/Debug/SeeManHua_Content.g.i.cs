@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("functionplan.txt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/%e6%90%9c%e5%b0%8b(%e7%99%bd).png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resource/%e6%90%9c%e5%b0%8b(%e9%bb%91).png")]
 
 
