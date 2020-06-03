@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomExtensions.cs" />
     <Compile Include="FunctionSearch.cs" />
     <Compile Include="LayoutSearch.cs" />
     <Compile Include="MainWindow.xaml.cs">

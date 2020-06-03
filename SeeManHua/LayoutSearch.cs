@@ -8,5 +8,9 @@ namespace SeeManHua
 {
     class LayoutSearch
     {
+        public LayoutSearch()
+        {
+
+        }
     }
 }
