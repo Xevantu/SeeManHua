@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CustomExtensions
 {
@@ -26,5 +28,5 @@ namespace CustomExtensions
         /// 1右2左
         /// </summary>
         RL
-    };
+    }
 }

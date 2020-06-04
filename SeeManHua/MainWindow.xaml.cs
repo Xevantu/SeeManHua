@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CustomExtensions;
+using System.Configuration;
 
 namespace SeeManHua
 {
@@ -49,11 +50,43 @@ namespace SeeManHua
         //建立htmlweb
         HtmlWeb webClient = new HtmlWeb();
         List<Grid> List_manhuaGrid = new List<Grid> { };
-        string strManHuaName, strManHuaIntro, searchContext, sUrl;
+        List<string> List_manhuaLink = new List<string> { };
+        string strManHuaName, strManHuaIntro, searchContext, strManHuaLink;
         int pressEnter = 0;
-        string searchHint = "漫畫名稱...";
+        string searchHint = "搜些什麼吧...";
+        ManhuarenHtml manhuarenHtml = new ManhuarenHtml();
         #endregion
+        /// <summary>
+        /// 網頁抽取
+        /// </summary>
+        class ManhuarenHtml
+        {
+            readonly string Title = "https://www.manhuaren.com";
+            readonly string SearchHead = "/search?title=";
+            readonly string SearchEnd = "&language=1";
+            public ManhuarenHtml()
+            {
 
+            }
+            /// <summary>
+            /// 透過關鍵字尋找漫畫。
+            /// </summary>
+            /// <param name="target">要搜尋的漫畫名稱。</param>
+            /// <returns>搜尋html格式字串。</returns>
+            public string Search(string target)
+            {
+                return (Title + SearchHead + target + SearchEnd);
+            }
+            /// <summary>
+            /// 鏈結到該漫畫的分頁。
+            /// </summary>
+            /// <param name="target">擷取的分頁名稱。</param>
+            /// <returns>分頁格式字串。</returns>
+            public string Link(string target)
+            {
+                return (Title + target);
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -66,9 +99,16 @@ namespace SeeManHua
             LayoutSetting(LayoutMode.RL, Image_searchIcon, TextBox_search, "", false);
             Grid_manhua_menu.Margin = new Thickness(0);
             Grid_manhua_menu.Width = SearchBarSize.Width + SearchIconSize.Width;
+            ListBox_manhua.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(ListBox_manhua_MouseLeftButtonDown), true);
             #endregion
         }
+        private void Main_szChange(object sender, SizeChangedEventArgs e)
+        {
+            Grid_manhua_menu.Height = this.Window_BG.ActualHeight;
+        }
 
+        
+        #region 佈局設定
         /// <summary>搜尋列。
         /// <para>僅負責設定排版位置，參數引進之前須設定好大小、顏色等等所需內容。</para>
         /// </summary>
@@ -83,18 +123,20 @@ namespace SeeManHua
             switch (mode)
             {
                 case LayoutMode.LR:
-                    textBox.HorizontalAlignment = HorizontalAlignment.Left;
-                    textBox.VerticalAlignment = VerticalAlignment.Center;
-                    textBox.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
-                    textBox.Margin = new Thickness(2);
-                    textBox.Width = SearchBarSize.Width;
-                    textBox.Height = SearchBarSize.Height;
                     img.HorizontalAlignment = HorizontalAlignment.Left;
-                    img.VerticalAlignment = VerticalAlignment.Center;
-                    img.Margin = new Thickness(textBox.Margin.Left + textBox.Width, textBox.Margin.Top, 0, 0);
+                    img.VerticalAlignment = VerticalAlignment.Top;
+                    img.Margin = new Thickness(2);
                     img.Width = SearchIconSize.Width;
                     img.Height = SearchIconSize.Height;
-                    grid.HorizontalAlignment = HorizontalAlignment.Right;
+                    textBox.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox.VerticalAlignment = VerticalAlignment.Top;
+                    textBox.Background = new SolidColorBrush(Color.FromArgb(50, 0, 0, 0));
+                    textBox.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 200, 200));
+                    textBox.Opacity = 30;
+                    textBox.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
+                    textBox.Width = SearchBarSize.Width;
+                    textBox.Height = SearchBarSize.Height;
+                    grid.HorizontalAlignment = HorizontalAlignment.Left;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(0);
                     grid.Width = img.Width + textBox.Width;
@@ -110,13 +152,12 @@ namespace SeeManHua
                     textBox.Margin = new Thickness(2);
                     textBox.Width = SearchBarSize.Width;
                     textBox.Height = SearchBarSize.Height;
-                    textBox.GotKeyboardFocus += TextBox_GotKeyboardFocus;
                     img.HorizontalAlignment = HorizontalAlignment.Left;
                     img.VerticalAlignment = VerticalAlignment.Top;
                     img.Margin = new Thickness(textBox.Margin.Left + textBox.Width, textBox.Margin.Top, 0, 0);
                     img.Width = SearchIconSize.Width;
                     img.Height = SearchIconSize.Height;
-                    grid.HorizontalAlignment = HorizontalAlignment.Right;
+                    grid.HorizontalAlignment = HorizontalAlignment.Left;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(0);
                     grid.Width = img.Width + textBox.Width;
@@ -133,11 +174,6 @@ namespace SeeManHua
                 grid.Children.Add(img);
             }
             return grid;
-        }
-
-        private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            
         }
 
         /// <summary>圖片、描述
@@ -199,21 +235,18 @@ namespace SeeManHua
             grid.Children.Add(img);
             return grid;
         }
-        
+        #endregion
 
-        private void Main_szChange(object sender, SizeChangedEventArgs e)
-        {
-            
-            Grid_manhua_menu.Height = this.Window_BG.ActualHeight;
-            
-        }
-
-        
-        
+        /// <summary>
+        /// 搜尋列的搜尋功能
+        /// </summary>
+        /// <param name="sender">TextBox_search</param>
+        /// <param name="e"></param>
         private void SearchBar_key_pup(object sender, KeyEventArgs e)
         {
             try
             {
+                TextBox textBox = (TextBox)sender;
                 //只要按到鍵盤就會觸發..
                 switch (e.Key)
                 {
@@ -224,12 +257,12 @@ namespace SeeManHua
                         {
                             Console.WriteLine("Click PreviewKeyUp= Enter" + searchContext);
                             //執行前先清空所有內容
+                            List_manhuaLink.Clear();
                             List_manhuaGrid.Clear();
                             ListBox_manhua.ItemsSource = null;
                             //載入網址資料
-                            searchContext = TextBox_search.Text;
-                            sUrl = "https://www.manhuaren.com/search?title=" + searchContext + "&language=1";
-                            HtmlDocument doc = webClient.Load(sUrl);
+                            searchContext = textBox.Text;
+                            HtmlDocument doc = webClient.Load(manhuarenHtml.Search(searchContext));
                             Console.WriteLine(doc.Text);
                             //lb_html.Content = doc.Text;   //確認是否有抓到html代碼
                             try
@@ -244,6 +277,9 @@ namespace SeeManHua
                                 {
                                     //標籤img內有需要的網址，透過Attribute取出
                                     string Url = list[cnt].SelectSingleNode("div[1]/a/img").Attributes["src"].Value;
+                                    //抽出分頁鏈結，並加入List
+                                    strManHuaLink= list[cnt].SelectSingleNode("div[1]/a").Attributes["href"].Value;
+                                    List_manhuaLink.Add(strManHuaLink);
                                     //將網址字串轉為Uri格式
                                     Uri uri = new Uri(Url);
                                     //透過網址下載圖片轉為BitmapImage格式
@@ -277,13 +313,14 @@ namespace SeeManHua
                                 {
                                     Source = image
                                 };
+                                List_manhuaLink.Add("搜尋不到結果，請更換關鍵字。");
                                 List_manhuaGrid.Add(LayoutSetting(img));
                             }
-
                             //設定列表排版
                             ListBox_manhua.HorizontalAlignment = HorizontalAlignment.Left;
                             ListBox_manhua.Margin = new Thickness(0, SearchBarSize.Height, 0, 0);
                             ListBox_manhua.Width = CoverSize.Width + IntroSize.Width;
+
                             //加入抓到的清單
                             ListBox_manhua.ItemsSource = List_manhuaGrid;
                             pressEnter = 0;
@@ -294,7 +331,7 @@ namespace SeeManHua
                         }
                         break;
                     case Key.Escape:
-                        TextBox_search.Text = "";
+                        textBox.Text = "";
                         pressEnter = 0;
                         break;
                     default:
@@ -308,6 +345,28 @@ namespace SeeManHua
                 MessageBox.Show(ex.Message);
             }
             
+        }
+        /// <summary>
+        /// 搜尋結果的左鍵功能
+        /// </summary>
+        /// <param name="sender">ListBox_manhua</param>
+        /// <param name="e"></param>
+        private void ListBox_manhua_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                //不使用webbrowser, 自己做介面來輸出內容。
+                ListBox listBox = (ListBox)sender;
+                //當內容為空SelectedIndex= -1
+                if (listBox.SelectedIndex != -1)
+                {
+                    Console.WriteLine(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
