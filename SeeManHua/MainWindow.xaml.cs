@@ -87,6 +87,9 @@ namespace SeeManHua
                 return (Title + target);
             }
         }
+        /// <summary>
+        /// 主要動作都在這邊做，布局、宣告、排列等等。
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -101,10 +104,26 @@ namespace SeeManHua
             Grid_manhua_menu.Width = SearchBarSize.Width + SearchIconSize.Width;
             ListBox_manhua.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(ListBox_manhua_MouseLeftButtonDown), true);
             #endregion
+
+            #region 觀賞區
+            Grid_browse.Margin = new Thickness(SearchBarSize.Width + SearchIconSize.Width, 0, 0, 0);
+            Grid_browse.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+            #endregion
         }
+        /// <summary>
+        /// 畫面改變大小得時候觸發。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Main_szChange(object sender, SizeChangedEventArgs e)
         {
-            Grid_manhua_menu.Height = this.Window_BG.ActualHeight;
+            //抓取畫面變化的數值
+            double winW = this.Window_BG.ActualWidth, winH = this.Window_BG.ActualHeight;
+            //列表布置
+            Grid_manhua_menu.Height = winH;
+            //觀賞區布置
+            Grid_browse.Width = winW - SearchBarSize.Width - SearchIconSize.Width;
+            Grid_browse.Height = winH;
         }
 
         
@@ -186,7 +205,7 @@ namespace SeeManHua
         public Grid LayoutSetting(LayoutMode mode, Image img, string str)
         {
             Grid grid = new Grid();
-            Label label = new Label();
+            TextBox textBox_Intro = new TextBox();
             switch (mode)
             {
                 case LayoutMode.LR:
@@ -195,23 +214,27 @@ namespace SeeManHua
                     img.Margin = new Thickness(2);
                     img.Width = CoverSize.Width;
                     img.Height = CoverSize.Height;
-                    label.Content = str;
-                    label.HorizontalAlignment = HorizontalAlignment.Left;
-                    label.VerticalAlignment = VerticalAlignment.Center;
-                    label.HorizontalContentAlignment = HorizontalAlignment.Left;
-                    label.VerticalContentAlignment = VerticalAlignment.Center;
-                    label.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
-                    label.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
-                    label.Width = IntroSize.Width;
-                    label.Height = IntroSize.Height;
+                    textBox_Intro.TextWrapping = TextWrapping.WrapWithOverflow;
+                    textBox_Intro.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox_Intro.VerticalAlignment = VerticalAlignment.Center;
+                    textBox_Intro.HorizontalContentAlignment = HorizontalAlignment.Left;
+                    textBox_Intro.VerticalContentAlignment = VerticalAlignment.Center;
+                    textBox_Intro.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+                    textBox_Intro.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Intro.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Intro.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
+                    textBox_Intro.BorderThickness = new Thickness(0);
+                    textBox_Intro.Width = IntroSize.Width;
+                    textBox_Intro.Height = IntroSize.Height;
+                    textBox_Intro.Text = str;
                     grid.HorizontalAlignment = HorizontalAlignment.Right;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(-5);
-                    grid.Width = img.Width + label.Width;
+                    grid.Width = img.Width + textBox_Intro.Width;
                     grid.Height = img.Height;
                     grid.Background = new SolidColorBrush(Color.FromArgb(100, 43, 43, 43));
                     grid.Children.Add(img);
-                    grid.Children.Add(label);
+                    grid.Children.Add(textBox_Intro);
                     break;
                 default:
 
@@ -361,6 +384,7 @@ namespace SeeManHua
                 if (listBox.SelectedIndex != -1)
                 {
                     Console.WriteLine(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
+                    //進行畫面的排版
                 }
             }
             catch (Exception ex)
