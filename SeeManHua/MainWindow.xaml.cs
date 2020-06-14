@@ -18,34 +18,7 @@ namespace SeeManHua
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-        public struct Size_m
-        {
-            public double Height { get; set; }
-            public double Width { get; set; }
-            public double Length { get; set; }
-            public double SerialNember { get; set; }
-        }
-        readonly static Size_m CoverSize = new Size_m
-        {
-            Height = 150,
-            Width = 100
-        };
-        readonly static Size_m IntroSize = new Size_m
-        {
-            Height = 100,
-            Width = 300
-        };
-        readonly static Size_m SearchBarSize = new Size_m
-        {
-            Height = 25,
-            Width = 375
-        };
-        readonly static Size_m SearchIconSize = new Size_m
-        {
-            Height = 25,
-            Width = 25
-        };
+        MyFormat myFormat = new MyFormat();
         #region 搜尋結果清單
         //建立htmlweb
         HtmlWeb webClient = new HtmlWeb();
@@ -101,12 +74,12 @@ namespace SeeManHua
             //搜尋頁佈局
             LayoutSetting(LayoutMode.RL, Image_searchIcon, TextBox_search, "", false);
             Grid_manhua_menu.Margin = new Thickness(0);
-            Grid_manhua_menu.Width = SearchBarSize.Width + SearchIconSize.Width;
+            Grid_manhua_menu.Width = myFormat.SearchBarWidth + myFormat.SearchIconWidth;
             ListBox_manhua.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(ListBox_manhua_MouseLeftButtonDown), true);
             #endregion
 
             #region 觀賞區
-            Grid_browse.Margin = new Thickness(SearchBarSize.Width + SearchIconSize.Width, 0, 0, 0);
+            Grid_browse.Margin = new Thickness(myFormat.SearchBarWidth + myFormat.SearchIconWidth, 0, 0, 0);
             Grid_browse.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
             #endregion
         }
@@ -122,7 +95,7 @@ namespace SeeManHua
             //列表布置
             Grid_manhua_menu.Height = winH;
             //觀賞區布置
-            Grid_browse.Width = winW - SearchBarSize.Width - SearchIconSize.Width;
+            Grid_browse.Width = winW - myFormat.SearchBarWidth - myFormat.SearchIconWidth;
             Grid_browse.Height = winH;
         }
 
@@ -145,16 +118,16 @@ namespace SeeManHua
                     img.HorizontalAlignment = HorizontalAlignment.Left;
                     img.VerticalAlignment = VerticalAlignment.Top;
                     img.Margin = new Thickness(2);
-                    img.Width = SearchIconSize.Width;
-                    img.Height = SearchIconSize.Height;
+                    img.Width = myFormat.SearchIconWidth;
+                    img.Height = myFormat.SearchIconHeight;
                     textBox.HorizontalAlignment = HorizontalAlignment.Left;
                     textBox.VerticalAlignment = VerticalAlignment.Top;
                     textBox.Background = new SolidColorBrush(Color.FromArgb(50, 0, 0, 0));
                     textBox.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 200, 200));
                     textBox.Opacity = 30;
                     textBox.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
-                    textBox.Width = SearchBarSize.Width;
-                    textBox.Height = SearchBarSize.Height;
+                    textBox.Width = myFormat.SearchBarWidth;
+                    textBox.Height = myFormat.SearchBarHeight;
                     grid.HorizontalAlignment = HorizontalAlignment.Left;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(0);
@@ -169,13 +142,13 @@ namespace SeeManHua
                     textBox.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 200, 200));
                     textBox.Opacity = 30;
                     textBox.Margin = new Thickness(2);
-                    textBox.Width = SearchBarSize.Width;
-                    textBox.Height = SearchBarSize.Height;
+                    textBox.Width = myFormat.SearchBarWidth;
+                    textBox.Height = myFormat.SearchBarHeight;
                     img.HorizontalAlignment = HorizontalAlignment.Left;
                     img.VerticalAlignment = VerticalAlignment.Top;
                     img.Margin = new Thickness(textBox.Margin.Left + textBox.Width, textBox.Margin.Top, 0, 0);
-                    img.Width = SearchIconSize.Width;
-                    img.Height = SearchIconSize.Height;
+                    img.Width = myFormat.SearchIconWidth;
+                    img.Height = myFormat.SearchIconHeight;
                     grid.HorizontalAlignment = HorizontalAlignment.Left;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(0);
@@ -202,18 +175,32 @@ namespace SeeManHua
         /// <param name="img">圖片</param>
         /// <param name="str">描述/ 內容</param>
         /// <returns>包裝好排版的Grid.</returns>
-        public Grid LayoutSetting(LayoutMode mode, Image img, string str)
+        public Grid LayoutSetting(LayoutMode mode, Image img, string sName, string sIntro)
         {
             Grid grid = new Grid();
             TextBox textBox_Intro = new TextBox();
+            TextBox textBox_Name = new TextBox();
             switch (mode)
             {
                 case LayoutMode.LR:
                     img.HorizontalAlignment = HorizontalAlignment.Left;
                     img.VerticalAlignment = VerticalAlignment.Center;
                     img.Margin = new Thickness(2);
-                    img.Width = CoverSize.Width;
-                    img.Height = CoverSize.Height;
+                    img.Width = myFormat.ResultCoverWidth;
+                    img.Height = myFormat.ResultCoverHeight;
+                    textBox_Name.TextWrapping = TextWrapping.WrapWithOverflow;
+                    textBox_Name.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox_Name.VerticalAlignment = VerticalAlignment.Center;
+                    textBox_Name.HorizontalContentAlignment = HorizontalAlignment.Left;
+                    textBox_Name.VerticalContentAlignment = VerticalAlignment.Center;
+                    textBox_Name.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+                    textBox_Name.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Name.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Name.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
+                    textBox_Name.BorderThickness = new Thickness(0);
+                    textBox_Name.Width = myFormat.ResultIntroWidth;
+                    textBox_Name.Height = myFormat.ResultIntroHeight;
+                    textBox_Name.Text = sName;
                     textBox_Intro.TextWrapping = TextWrapping.WrapWithOverflow;
                     textBox_Intro.HorizontalAlignment = HorizontalAlignment.Left;
                     textBox_Intro.VerticalAlignment = VerticalAlignment.Center;
@@ -224,9 +211,9 @@ namespace SeeManHua
                     textBox_Intro.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
                     textBox_Intro.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
                     textBox_Intro.BorderThickness = new Thickness(0);
-                    textBox_Intro.Width = IntroSize.Width;
-                    textBox_Intro.Height = IntroSize.Height;
-                    textBox_Intro.Text = str;
+                    textBox_Intro.Width = myFormat.ResultIntroWidth;
+                    textBox_Intro.Height = myFormat.ResultIntroHeight;
+                    textBox_Intro.Text = sIntro;
                     grid.HorizontalAlignment = HorizontalAlignment.Right;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(-5);
@@ -253,8 +240,8 @@ namespace SeeManHua
             img.HorizontalAlignment = HorizontalAlignment.Center;
             img.VerticalAlignment = VerticalAlignment.Center;
             img.Margin = new Thickness(0);
-            img.Width = SearchBarSize.Width + SearchIconSize.Width;
-            img.Height = SearchBarSize.Width + SearchIconSize.Width;
+            img.Width = myFormat.SearchBarWidth + myFormat.SearchIconWidth;
+            img.Height = myFormat.SearchBarHeight + myFormat.SearchIconHeight;
             grid.Children.Add(img);
             return grid;
         }
@@ -341,8 +328,8 @@ namespace SeeManHua
                             }
                             //設定列表排版
                             ListBox_manhua.HorizontalAlignment = HorizontalAlignment.Left;
-                            ListBox_manhua.Margin = new Thickness(0, SearchBarSize.Height, 0, 0);
-                            ListBox_manhua.Width = CoverSize.Width + IntroSize.Width;
+                            ListBox_manhua.Margin = new Thickness(0, myFormat.SearchBarHeight, 0, 0);
+                            ListBox_manhua.Width = myFormat.ResultCoverWidth + myFormat.ResultIntroWidth;
 
                             //加入抓到的清單
                             ListBox_manhua.ItemsSource = List_manhuaGrid;
