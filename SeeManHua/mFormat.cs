@@ -8,23 +8,30 @@ namespace SeeManHua
 {
     class MyFormat
     {
-        public int ResultCoverHeight = 150;
-        public int ResultCoverWidth = 100;
-        public int ResultNameHeight = 25;
-        public int ResultNameWidth = 25;
-        public int ResultIntroHeight = 100;
-        public int ResultIntroWidth = 300;
-        public int SearchBarHeight = 25;
-        public int SearchBarWidth = 375;
-        public int SearchIconHeight = 25;
-        public int SearchIconWidth = 25;
+        public double ResultCoverHeight = 150;
+        public double ResultCoverWidth = 100;
+        public double ResultNameHeight = 25;
+        public double ResultNameWidth = 300;
+        public double ResultNameFontSize = 16;
+        public double ResultIntroHeight = 100;
+        public double ResultIntroWidth = 300;
+        public double ResultIntroFontSize = 14;
+        public double ResultSortHeight = 25;
+        public double ResultSortWidth = 150;
+        public double ResultSortFontSize = 14;
+        public double ResultStatusHeight = 25;
+        public double ResultStatusWidth = 150;
+        public double ResultStatusFontSize = 14;
+        public double SearchBarHeight = 25;
+        public double SearchBarWidth = 375;
+        public double SearchIconHeight = 25;
+        public double SearchIconWidth = 25;
         public MyFormat() { }
-        public struct Size_m
-        {
-            public double Height { get; set; }
-            public double Width { get; set; }
-            public double Length { get; set; }
-            public double SerialNember { get; set; }
-        }
+        
+    }
+
+    class BrowseFormat
+    {
+
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CustomExtensions;
 using System.Configuration;
+using System.Windows.Documents;
 
 namespace SeeManHua
 {
@@ -24,10 +25,12 @@ namespace SeeManHua
         HtmlWeb webClient = new HtmlWeb();
         List<Grid> List_manhuaGrid = new List<Grid> { };
         List<string> List_manhuaLink = new List<string> { };
-        string strManHuaName, strManHuaIntro, searchContext, strManHuaLink;
+        string strManHuaName, strManHuaIntro, strManHuaSort, strManHuaStatus, searchContext, strManHuaLink;
         int pressEnter = 0;
-        string searchHint = "搜些什麼吧...";
         ManhuarenHtml manhuarenHtml = new ManhuarenHtml();
+        #endregion
+        #region BrowsePage
+
         #endregion
         /// <summary>
         /// 網頁抽取
@@ -37,10 +40,7 @@ namespace SeeManHua
             readonly string Title = "https://www.manhuaren.com";
             readonly string SearchHead = "/search?title=";
             readonly string SearchEnd = "&language=1";
-            public ManhuarenHtml()
-            {
-
-            }
+            public ManhuarenHtml() { }
             /// <summary>
             /// 透過關鍵字尋找漫畫。
             /// </summary>
@@ -59,6 +59,7 @@ namespace SeeManHua
             {
                 return (Title + target);
             }
+
         }
         /// <summary>
         /// 主要動作都在這邊做，布局、宣告、排列等等。
@@ -175,11 +176,13 @@ namespace SeeManHua
         /// <param name="img">圖片</param>
         /// <param name="str">描述/ 內容</param>
         /// <returns>包裝好排版的Grid.</returns>
-        public Grid LayoutSetting(LayoutMode mode, Image img, string sName, string sIntro)
+        public Grid LayoutSetting(LayoutMode mode, Image img, string sName, string sIntro, string sSort, string sStatus)
         {
             Grid grid = new Grid();
             TextBox textBox_Intro = new TextBox();
             TextBox textBox_Name = new TextBox();
+            TextBox textBox_Sort = new TextBox();
+            TextBox textBox_Status = new TextBox();
             switch (mode)
             {
                 case LayoutMode.LR:
@@ -190,30 +193,68 @@ namespace SeeManHua
                     img.Height = myFormat.ResultCoverHeight;
                     textBox_Name.TextWrapping = TextWrapping.WrapWithOverflow;
                     textBox_Name.HorizontalAlignment = HorizontalAlignment.Left;
-                    textBox_Name.VerticalAlignment = VerticalAlignment.Center;
+                    textBox_Name.VerticalAlignment = VerticalAlignment.Top;
                     textBox_Name.HorizontalContentAlignment = HorizontalAlignment.Left;
-                    textBox_Name.VerticalContentAlignment = VerticalAlignment.Center;
+                    textBox_Name.VerticalContentAlignment = VerticalAlignment.Top;
                     textBox_Name.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
                     textBox_Name.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
                     textBox_Name.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
                     textBox_Name.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
                     textBox_Name.BorderThickness = new Thickness(0);
-                    textBox_Name.Width = myFormat.ResultIntroWidth;
-                    textBox_Name.Height = myFormat.ResultIntroHeight;
+                    textBox_Name.Width = myFormat.ResultNameWidth;
+                    textBox_Name.Height = myFormat.ResultNameHeight;
+                    textBox_Name.IsReadOnly = true;
+                    textBox_Name.FontWeight = FontWeights.Bold;
+                    textBox_Name.FontSize = myFormat.ResultNameFontSize;
                     textBox_Name.Text = sName;
                     textBox_Intro.TextWrapping = TextWrapping.WrapWithOverflow;
                     textBox_Intro.HorizontalAlignment = HorizontalAlignment.Left;
-                    textBox_Intro.VerticalAlignment = VerticalAlignment.Center;
+                    textBox_Intro.VerticalAlignment = VerticalAlignment.Top;
                     textBox_Intro.HorizontalContentAlignment = HorizontalAlignment.Left;
-                    textBox_Intro.VerticalContentAlignment = VerticalAlignment.Center;
+                    textBox_Intro.VerticalContentAlignment = VerticalAlignment.Top;
                     textBox_Intro.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
                     textBox_Intro.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
                     textBox_Intro.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-                    textBox_Intro.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top, 0, 0);
+                    textBox_Intro.Margin = new Thickness(img.Margin.Left + img.Width, img.Margin.Top + textBox_Name.Height, 0, 0);
                     textBox_Intro.BorderThickness = new Thickness(0);
                     textBox_Intro.Width = myFormat.ResultIntroWidth;
                     textBox_Intro.Height = myFormat.ResultIntroHeight;
+                    textBox_Intro.IsReadOnly = true;
+                    textBox_Intro.FontWeight = FontWeights.Normal;
+                    textBox_Intro.FontSize = myFormat.ResultIntroFontSize;
                     textBox_Intro.Text = sIntro;
+                    textBox_Sort.TextWrapping = TextWrapping.WrapWithOverflow;
+                    textBox_Sort.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox_Sort.VerticalAlignment = VerticalAlignment.Top;
+                    textBox_Sort.HorizontalContentAlignment = HorizontalAlignment.Left;
+                    textBox_Sort.VerticalContentAlignment = VerticalAlignment.Top;
+                    textBox_Sort.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 200, 0));
+                    textBox_Sort.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Sort.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Sort.Margin = new Thickness(img.Margin.Left + img.Width, textBox_Intro.Margin.Top + textBox_Intro.Height, 0, 0);
+                    textBox_Sort.BorderThickness = new Thickness(0);
+                    textBox_Sort.Width = myFormat.ResultSortWidth;
+                    textBox_Sort.Height = myFormat.ResultSortHeight;
+                    textBox_Sort.IsReadOnly = true;
+                    textBox_Sort.FontWeight = FontWeights.Normal;
+                    textBox_Sort.FontSize = myFormat.ResultSortFontSize;
+                    textBox_Sort.Text = sSort;
+                    textBox_Status.TextWrapping = TextWrapping.WrapWithOverflow;
+                    textBox_Status.HorizontalAlignment = HorizontalAlignment.Left;
+                    textBox_Status.VerticalAlignment = VerticalAlignment.Top;
+                    textBox_Status.HorizontalContentAlignment = HorizontalAlignment.Right;
+                    textBox_Status.VerticalContentAlignment = VerticalAlignment.Top;
+                    textBox_Status.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 200, 0));
+                    textBox_Status.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Status.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    textBox_Status.Margin = new Thickness(textBox_Sort.Margin.Left + textBox_Sort.Width, textBox_Intro.Margin.Top + textBox_Intro.Height, 0, 0);
+                    textBox_Status.BorderThickness = new Thickness(0);
+                    textBox_Status.Width = myFormat.ResultStatusWidth;
+                    textBox_Status.Height = myFormat.ResultStatusHeight;
+                    textBox_Status.IsReadOnly = true;
+                    textBox_Status.FontWeight = FontWeights.Normal;
+                    textBox_Status.FontSize = myFormat.ResultStatusFontSize;
+                    textBox_Status.Text = sStatus;
                     grid.HorizontalAlignment = HorizontalAlignment.Right;
                     grid.VerticalAlignment = VerticalAlignment.Top;
                     grid.Margin = new Thickness(-5);
@@ -221,7 +262,10 @@ namespace SeeManHua
                     grid.Height = img.Height;
                     grid.Background = new SolidColorBrush(Color.FromArgb(100, 43, 43, 43));
                     grid.Children.Add(img);
+                    grid.Children.Add(textBox_Name);
                     grid.Children.Add(textBox_Intro);
+                    grid.Children.Add(textBox_Sort);
+                    grid.Children.Add(textBox_Status);
                     break;
                 default:
 
@@ -273,7 +317,7 @@ namespace SeeManHua
                             //載入網址資料
                             searchContext = textBox.Text;
                             HtmlDocument doc = webClient.Load(manhuarenHtml.Search(searchContext));
-                            Console.WriteLine(doc.Text);
+                            //Console.WriteLine(doc.Text);
                             //lb_html.Content = doc.Text;   //確認是否有抓到html代碼
                             try
                             {
@@ -304,7 +348,9 @@ namespace SeeManHua
                                     Thread.Sleep(5);
                                     strManHuaName = list[cnt].SelectSingleNode("div[2]/a/p[1]").InnerText;
                                     strManHuaIntro = list[cnt].SelectSingleNode("div[2]/a/p[2]").InnerText;
-                                    List_manhuaGrid.Add(LayoutSetting(LayoutMode.LR, img, strManHuaName + "\n" + strManHuaIntro));
+                                    strManHuaSort = list[cnt].SelectSingleNode("div[2]/p/span[1]").InnerText;
+                                    strManHuaStatus = list[cnt].SelectSingleNode("div[2]/p/span").InnerText;
+                                    List_manhuaGrid.Add(LayoutSetting(LayoutMode.LR, img, strManHuaName, strManHuaIntro, strManHuaSort, strManHuaStatus));
                                 }
                             }
                             catch (Exception)
@@ -372,6 +418,25 @@ namespace SeeManHua
                 {
                     Console.WriteLine(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
                     //進行畫面的排版
+                    HtmlDocument doc = webClient.Load(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
+                    //label
+                    HtmlNodeCollection list_chapter = doc.DocumentNode.SelectNodes("/html/body/div[5]/ul[1]/li");
+                    Console.WriteLine("Chapter Count= " + list_chapter.Count);
+                    //Image
+                    string coverLink = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[1]/img").Attributes["src"].Value;
+                    Console.WriteLine("CoverLink= " + coverLink);
+                    //Label
+                    string Name = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[1]").InnerText;
+                    Console.WriteLine("Name= " + Name);
+                    //Label
+                    string sSort = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[4]/span/a").InnerText;
+                    Console.WriteLine("Sort= " + sSort);
+                    //TextBox
+                    string sIntro = doc.DocumentNode.SelectSingleNode("/html/body/p").InnerText;
+                    Console.WriteLine("Intro= " + sIntro);
+                    //Label
+                    string StartRead = doc.DocumentNode.SelectSingleNode("/html/body/div[7]/a[4]").Attributes["href"].Value;
+                    Console.WriteLine("StartRead Link= " + StartRead);
                 }
             }
             catch (Exception ex)

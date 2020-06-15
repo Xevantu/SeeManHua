@@ -13,7 +13,16 @@
 --搜尋條: 輸入文字，轉為16進制後送出查詢結果，顯示於結果列
 ++搜尋條: 輸入文字，加入網址後送出查詢結果，顯示於結果列
 
-3.觀賞區
+3.觀賞區(BrowsePage)
+Browse Page
+Cover:	/html/body/div[3]/div[1]/img	=>  Attribute (src)
+Name:	/html/body/div[3]/div[2]/p[1]	=>  InnerText
+Sort:	/html/body/div[3]/div[2]/p[4]/span/a	=>  InnerText
+Intro:	/html/body/p	=>  InnerText
+StartRead:	/html/body/div[7]/a[4]	=>  Attribute  (href)
+ChapterItem:	/html/body/div[5]/ul[1]/li/a	=>  Attribute  (href)
+/html/body/div[5]/ul[1]/li	<=  做成list
+
 3-1.位於列表右方，列表可伸縮，伸縮完畢之後縮放觀賞區。(點選觀賞區可以縮回列表)
 3-2.漫畫載入，一次一話/捲，儲存檔案至本地端，方便日後讀取。
 3-3.載入後套用於listbox, 下拉式/左右翻頁/雙頁模式。
