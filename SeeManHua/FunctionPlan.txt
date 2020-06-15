@@ -17,6 +17,7 @@
 Browse Page
 Cover:	/html/body/div[3]/div[1]/img	=>  Attribute (src)
 Name:	/html/body/div[3]/div[2]/p[1]	=>  InnerText
+Author:	/html/body/div[3]/div[2]/p[3]/a	=>  InnerText
 Sort:	/html/body/div[3]/div[2]/p[4]/span/a	=>  InnerText
 Intro:	/html/body/p	=>  InnerText
 StartRead:	/html/body/div[7]/a[4]	=>  Attribute  (href)

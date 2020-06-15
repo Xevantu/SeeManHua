@@ -21,6 +21,7 @@ namespace SeeManHua
     {
         MyFormat myFormat = new MyFormat();
         #region 搜尋結果清單
+        SearchList searchList;
         //建立htmlweb
         HtmlWeb webClient = new HtmlWeb();
         List<Grid> List_manhuaGrid = new List<Grid> { };
@@ -30,7 +31,7 @@ namespace SeeManHua
         ManhuarenHtml manhuarenHtml = new ManhuarenHtml();
         #endregion
         #region BrowsePage
-
+        BrowsePage browsePage;
         #endregion
         /// <summary>
         /// 網頁抽取
@@ -73,6 +74,7 @@ namespace SeeManHua
 
             #region 搜尋動作及結果
             //搜尋頁佈局
+
             LayoutSetting(LayoutMode.RL, Image_searchIcon, TextBox_search, "", false);
             Grid_manhua_menu.Margin = new Thickness(0);
             Grid_manhua_menu.Width = myFormat.SearchBarWidth + myFormat.SearchIconWidth;
@@ -98,6 +100,7 @@ namespace SeeManHua
             //觀賞區布置
             Grid_browse.Width = winW - myFormat.SearchBarWidth - myFormat.SearchIconWidth;
             Grid_browse.Height = winH;
+            //searchList = new SearchList(main_bg, TextBox_search, Image_searchIcon, Grid_manhua_menu);
         }
 
         
@@ -413,30 +416,64 @@ namespace SeeManHua
             {
                 //不使用webbrowser, 自己做介面來輸出內容。
                 ListBox listBox = (ListBox)sender;
+                List<Button> list_chapters=new List<Button> { };
+                Image image = new Image();
+                Label lbName = new Label();
+                Label lbAuthor = new Label();
+                Label lbSort = new Label();
+                TextBox tbIntro = new TextBox();
+                Button btnStartRead = new Button();
+
                 //當內容為空SelectedIndex= -1
                 if (listBox.SelectedIndex != -1)
                 {
                     Console.WriteLine(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
                     //進行畫面的排版
+                    
                     HtmlDocument doc = webClient.Load(manhuarenHtml.Link(List_manhuaLink[listBox.SelectedIndex]));
-                    //label
-                    HtmlNodeCollection list_chapter = doc.DocumentNode.SelectNodes("/html/body/div[5]/ul[1]/li");
-                    Console.WriteLine("Chapter Count= " + list_chapter.Count);
                     //Image
                     string coverLink = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[1]/img").Attributes["src"].Value;
+                    //將網址字串轉為Uri格式
+                    Uri uri = new Uri(coverLink);
+                    //透過網址下載圖片轉為BitmapImage格式
+                    BitmapImage bmg = new BitmapImage(uri);
+                    image.Source = bmg;
                     Console.WriteLine("CoverLink= " + coverLink);
+                    Grid_browse.Children.Add(image);
                     //Label
                     string Name = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[1]").InnerText;
+                    lbName.Content = Name;
                     Console.WriteLine("Name= " + Name);
+                    Grid_browse.Children.Add(lbName);
+                    //Label
+                    string Author = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[3]/a").InnerText;
+                    lbAuthor.Content = Author;
+                    Console.WriteLine("Author= " + Author);
+                    Grid_browse.Children.Add(lbAuthor);
                     //Label
                     string sSort = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[4]/span/a").InnerText;
+                    lbSort.Content = sSort;
                     Console.WriteLine("Sort= " + sSort);
+                    Grid_browse.Children.Add(lbSort);
                     //TextBox
                     string sIntro = doc.DocumentNode.SelectSingleNode("/html/body/p").InnerText;
+                    tbIntro.Text = sIntro;
                     Console.WriteLine("Intro= " + sIntro);
-                    //Label
+                    Grid_browse.Children.Add(tbIntro);
+                    //Button
                     string StartRead = doc.DocumentNode.SelectSingleNode("/html/body/div[7]/a[4]").Attributes["href"].Value;
+                    btnStartRead.Content = StartRead;
                     Console.WriteLine("StartRead Link= " + StartRead);
+                    Grid_browse.Children.Add(btnStartRead);
+                    //List<Button>
+                    HtmlNodeCollection list_chapter = doc.DocumentNode.SelectNodes("/html/body/div[5]/ul[1]/li");
+                    browsePage = new BrowsePage(image, lbName, lbAuthor, lbSort, tbIntro, btnStartRead, list_chapters, list_chapter.Count);
+                    for (int i = 0; i < list_chapters.Count; i++)
+                    {
+                        list_chapters[i].Content = list_chapter[i].SelectSingleNode("a").InnerText;
+                        Grid_browse.Children.Add(list_chapters[i]);
+                    }
+                    Console.WriteLine("Chapter Count= " + list_chapter.Count);
                 }
             }
             catch (Exception ex)
