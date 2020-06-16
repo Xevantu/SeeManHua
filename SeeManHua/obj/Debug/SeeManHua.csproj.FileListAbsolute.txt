@@ -22,7 +22,6 @@ D:\Git\SeeManHua\SeeManHua\bin\Debug\SeeManHua.pdb
 D:\Git\SeeManHua\SeeManHua\bin\Debug\HtmlAgilityPack.dll
 D:\Git\SeeManHua\SeeManHua\bin\Debug\HtmlAgilityPack.pdb
 D:\Git\SeeManHua\SeeManHua\bin\Debug\HtmlAgilityPack.xml
-D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua.csprojAssemblyReference.cache
 D:\Git\SeeManHua\SeeManHua\obj\Debug\MainWindow.g.cs
 D:\Git\SeeManHua\SeeManHua\obj\Debug\App.g.cs
 D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua_MarkupCompile.cache
@@ -36,3 +35,4 @@ D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua.csproj.CopyComplete
 D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua.exe
 D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua.pdb
 D:\ivan.lee\SeeManHua\SeeManHua\obj\Debug\SeeManHua.csprojAssemblyReference.cache
+D:\Git\SeeManHua\SeeManHua\obj\Debug\SeeManHua.csprojAssemblyReference.cache

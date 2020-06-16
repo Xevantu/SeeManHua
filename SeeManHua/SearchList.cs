@@ -351,14 +351,14 @@ namespace SeeManHua
                     Console.WriteLine("Name= " + Name);
                     //Grid_browse.Children.Add(lbName);
                     //Label
-                    string Author = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[3]/a").InnerText;
-                    brPageSetting.Author = Author;
-                    Console.WriteLine("Author= " + Author);
+                    HtmlNodeCollection list_author = doc.DocumentNode.SelectNodes("/html/body/div[3]/div[2]/p[3]/a");
+                    brPageSetting.Author = list_author;
+                    Console.WriteLine("Author.Count= " + list_author.Count);
                     //Grid_browse.Children.Add(lbAuthor);
                     //Label
-                    string sSort = doc.DocumentNode.SelectSingleNode("/html/body/div[3]/div[2]/p[4]/span/a").InnerText;
-                    brPageSetting.Sort = sSort;
-                    Console.WriteLine("Sort= " + sSort);
+                    HtmlNodeCollection list_sort = doc.DocumentNode.SelectNodes("/html/body/div[3]/div[2]/p[4]/span");
+                    brPageSetting.Sort = list_sort;
+                    Console.WriteLine("Sort.Count= " + list_sort.Count);
                     //Grid_browse.Children.Add(lbSort);
                     //TextBox
                     string Intro = doc.DocumentNode.SelectSingleNode("/html/body/p").InnerText;

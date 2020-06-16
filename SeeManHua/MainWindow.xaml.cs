@@ -43,14 +43,7 @@ namespace SeeManHua
 
             #region 搜尋動作及結果
             //搜尋頁佈局
-            assembly = Assembly.GetExecutingAssembly();
-            string name = assembly.GetName().Name;
-            //imgStream = assembly.GetManifestResourceStream("SeeManHua.dragon.jpg");
-            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(assembly.GetManifestResourceStream(name + ".resource.dragon.jpg"));
-            //Console.WriteLine(name + ".resource.dragon.jpg");
-            //searchListSetting.CoverImage = new BitmapImage(new Uri(name + ".resource.dragon.jpg"));
             searchList = new SearchList(Grid_menu, Grid_browse, searchListSetting);
-            
             #endregion
 
             #region 觀賞區
