@@ -1,109 +1,140 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Input.StylusPlugIns;
 using System.Windows.Media;
 using System.Windows.Media.Converters;
+using System.Windows.Media.Imaging;
 
 namespace SeeManHua
 {
     class BrowsePage
     {
         //CoverH= NameH+ StatusH+ SortH
-        double CoverH = 400;
         double CoverW = 200;
-        double NameH = 200;
-        double NameW = 500;
-        double NameFS = 50;
-        double StatusH = 100;
-        double StatusW = 500;
-        double StatusFS = 25;
-        double SortH = 100;
-        double SortW = 500;
-        double SortFS = 25;
         double IntroH = 100;
-        double IntroW = 1000;
         double IntroFS = 18;
-        double StartReadH = 50;
-        double StartReadW = 100;
-        double StartReadFS = 30;
         double ChapterItemFS = 20;
-
+        /// <summary>
+        /// 字元與寬度之間的係數
+        /// </summary>
+        double widthCoefficient = 1.2;
+        /// <summary>
+        /// 外框高度與字元大小的係數
+        /// </summary>
+        double fsCoefficient = 0.6;
         public BrowsePage() { }
 
-        public BrowsePage(Image imgCover, Label lbName, Label lbStatus, Label lbSort, TextBox tbIntro, Button btnStartRead, object btnChpater, int chpaterCount)
+        public BrowsePage(Grid tGrid, BrowsePageSetting brPageSetting)
         {
-            imgCover.HorizontalAlignment = HorizontalAlignment.Left;
-            imgCover.VerticalAlignment = VerticalAlignment.Top;
-            imgCover.Margin = new Thickness(2);
-            imgCover.Height = CoverW * imgCover.Source.Height / imgCover.Source.Width;
-            imgCover.Width = CoverW;
+            tGrid.Children.Clear();
+            Image imgCover = new Image
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(2),
+                Height = CoverW * brPageSetting.Bimg.Height / brPageSetting.Bimg.Width,
+                Width = CoverW,
+                Source = brPageSetting.Bimg
+            };
+            tGrid.Children.Add(imgCover);
 
-            lbName.HorizontalAlignment = HorizontalAlignment.Left;
-            lbName.VerticalAlignment = VerticalAlignment.Top;
-            lbName.Margin = new Thickness(imgCover.Margin.Left + imgCover.Width, imgCover.Margin.Top, 0, 0);
-            lbName.Height = imgCover.Height * 0.4;
-            lbName.Width = NameW;
-            lbName.FontWeight = FontWeights.Bold;
-            lbName.FontSize = lbName.Height * 0.5;
+            Label lbName = new Label
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(imgCover.Margin.Left + imgCover.Width, imgCover.Margin.Top, 0, 0),
+                Height = imgCover.Height * 0.3,
+                FontWeight = FontWeights.Bold
+            };
+            lbName.FontSize = lbName.Height * fsCoefficient;
+            lbName.Width = brPageSetting.Name.Length * lbName.FontSize * widthCoefficient;
+            lbName.Content = brPageSetting.Name;
+            tGrid.Children.Add(lbName);
 
-            lbStatus.HorizontalAlignment = HorizontalAlignment.Left;
-            lbStatus.VerticalAlignment = VerticalAlignment.Top;
-            lbStatus.Margin = new Thickness(lbName.Margin.Left, lbName.Margin.Top + lbName.Height, 0, 0);
-            lbStatus.Height = imgCover.Height * 0.3;
-            lbStatus.Width = StatusW;
-            lbStatus.FontSize = lbStatus.Height * 0.5;
+            Label lbAuthor = new Label
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(lbName.Margin.Left, lbName.Margin.Top + lbName.Height, 0, 0),
+                Height = imgCover.Height * 0.2
+            };
+            lbAuthor.FontSize = lbAuthor.Height * fsCoefficient;
+            lbAuthor.Width = brPageSetting.Author.Length * lbAuthor.FontSize * widthCoefficient;
+            lbAuthor.Content = brPageSetting.Author;
+            tGrid.Children.Add(lbAuthor);
 
-            lbSort.HorizontalAlignment = HorizontalAlignment.Left;
-            lbSort.VerticalAlignment = VerticalAlignment.Top;
-            lbSort.Margin = new Thickness(lbName.Margin.Left, lbStatus.Margin.Top + lbStatus.Height + 1, 0, 0);
-            lbSort.Height = imgCover.Height * 0.3;
-            lbSort.Width = SortW;
-            lbSort.FontSize = lbSort.Height * 0.5;
+            Label lbSort = new Label
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(lbName.Margin.Left, lbAuthor.Margin.Top + lbAuthor.Height, 0, 0),
+                Height = imgCover.Height * 0.2
+            };
+            lbSort.FontSize = lbSort.Height * fsCoefficient;
+            lbSort.Width = brPageSetting.Sort.Length * lbSort.FontSize * widthCoefficient;
+            lbSort.Content = brPageSetting.Sort;
+            tGrid.Children.Add(lbSort);
 
-            tbIntro.TextWrapping = TextWrapping.WrapWithOverflow;
-            tbIntro.HorizontalAlignment = HorizontalAlignment.Left;
-            tbIntro.VerticalAlignment = VerticalAlignment.Top;
-            tbIntro.HorizontalContentAlignment = HorizontalAlignment.Left;
-            tbIntro.VerticalContentAlignment = VerticalAlignment.Top;
-            tbIntro.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
-            tbIntro.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-            tbIntro.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-            tbIntro.Margin = new Thickness(imgCover.Margin.Left, imgCover.Margin.Top + imgCover.Height, 0, 0);
-            tbIntro.BorderThickness = new Thickness(0);
-            tbIntro.Height = IntroH;
-            tbIntro.Width = IntroW;
-            tbIntro.IsReadOnly = true;
-            tbIntro.FontSize = IntroFS;
+            TextBox tbIntro = new TextBox
+            {
+                TextWrapping = TextWrapping.WrapWithOverflow,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Top,
+                Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
+                Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                Margin = new Thickness(imgCover.Margin.Left, imgCover.Margin.Top + imgCover.Height + 5, 0, 0),
+                BorderThickness = new Thickness(0),
+                Height = IntroH,
+                Width = tGrid.Width,
+                IsReadOnly = true,
+                FontSize = IntroFS,
+                Text = brPageSetting.Intro
+            };
+            tGrid.Children.Add(tbIntro);
 
-            btnStartRead.HorizontalAlignment = HorizontalAlignment.Left;
-            btnStartRead.VerticalAlignment = VerticalAlignment.Top;
-            btnStartRead.HorizontalContentAlignment = HorizontalAlignment.Left;
-            btnStartRead.VerticalContentAlignment = VerticalAlignment.Top;
-            btnStartRead.Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
-            btnStartRead.Background = new SolidColorBrush(Color.FromArgb(60, 255, 255, 0));
-            btnStartRead.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-            btnStartRead.Margin = new Thickness(imgCover.Margin.Left, tbIntro.Margin.Top + tbIntro.Height, 0, 0);
-            btnStartRead.BorderThickness = new Thickness(0);
-            btnStartRead.Height = StartReadH;
-            btnStartRead.Width = StartReadW;
-            btnStartRead.FontSize = StartReadFS;
+            Button btnStartRead = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
+                Background = new SolidColorBrush(Color.FromArgb(60, 255, 255, 0)),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                Margin = new Thickness(tGrid.Width * 0.06, tbIntro.Margin.Top + tbIntro.Height + 5, 0, 5),
+                BorderThickness = new Thickness(0),
+                Height = imgCover.Height * 0.1,
+                Content = "開始閱讀",
+                Uid = brPageSetting.StartRead
+            };
+            btnStartRead.FontSize = btnStartRead.Height * fsCoefficient;
+            //btnStartRead.Width = btnStartRead.FontSize * btnStartRead.Content.ToString().Length * widthCoefficient;
+            btnStartRead.Width = tGrid.Width * 0.87;
+            tGrid.Children.Add(btnStartRead);
 
             /* 5個1列
              * row |
              * col -
              */
-            List<Button> list_chapters = (List<Button>)btnChpater;
+            HtmlNodeCollection chapterItem = (HtmlNodeCollection)brPageSetting.BtnChapter;
             int row, col;
             double ChapterItemH = ChapterItemFS * 2;
-            double ChapterItemW = ChapterItemFS * 5;
-            for (int i = 0; i < chpaterCount; i++)
+            double ChapterItemW = tGrid.Width * 0.25;
+            double ChapterItemDistance = tGrid.Width * 0.06;
+            for (int i = 0; i < chapterItem.Count; i++)
             {
-                row = i % 5;
-                col = i / 5;
+                row = i % 3;
+                col = i / 3;
                 Button button = new Button()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -113,14 +144,23 @@ namespace SeeManHua
                     Foreground = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)),
                     Background = new SolidColorBrush(Color.FromArgb(80, 200, 200, 200)),
                     BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
-                    Margin = new Thickness(imgCover.Margin.Left + ChapterItemW * row + 2, btnStartRead.Margin.Top + btnStartRead.Height + ChapterItemH * col + 2, 0, 0),
+                    Margin = new Thickness((ChapterItemW + ChapterItemDistance) * row + ChapterItemDistance, btnStartRead.Margin.Top + btnStartRead.Height + (ChapterItemH + 5) * col + 10, 0, 0),
                     BorderThickness = new Thickness(0),
+                    
                     Height = ChapterItemH,
                     Width = ChapterItemW,
-                    FontSize = ChapterItemFS
+                    FontSize = ChapterItemFS,
+                    Content = chapterItem[i].SelectSingleNode("a").InnerText,
+                    Uid = chapterItem[i].SelectSingleNode("a").Attributes["href"].Value
                 };
-                list_chapters.Add(button);
+                button.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(BtnChapter_MouseLeftButtonDown), true);
+                tGrid.Children.Add(button);
             }
+        }
+        private void BtnChapter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Button btn = (Button)sender;
+            Console.WriteLine(btn.Uid);
         }
     }
 }

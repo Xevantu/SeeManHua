@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,7 +62,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BrowsePageSetting.cs" />
+    <Compile Include="ManHuaRenHtml.cs" />
     <Compile Include="SearchList.cs" />
+    <Compile Include="SearchListSetting.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,7 +82,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mFormat.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -111,7 +114,7 @@
     <EmbeddedResource Include="resource\SearchIcon%28black%29.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="1589204440988.jpg" />
+    <EmbeddedResource Include="resource\dragon.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FunctionPlan.txt" />

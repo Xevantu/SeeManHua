@@ -8,13 +8,10 @@
         Background="{x:Null}"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="main_bg" Margin="0,0,0,0" SizeChanged="Main_szChange" Background="#FF2B2B2B" HorizontalAlignment="Left" >
-        <Grid x:Name="Grid_manhua_menu" Margin="-71,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Height="212" >
-            <TextBox x:Name="TextBox_search" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Foreground="{x:Null}" BorderThickness="0" SpellCheck.IsEnabled="True" FontSize="14" FontFamily="MS Reference Sans Serif" Width="34" Margin="0" VerticalContentAlignment="Center" Opacity="0.4" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" ToolTip="搜尋漫畫..." PreviewKeyUp="SearchBar_key_pup"/>
-            <Image x:Name="Image_searchIcon" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="23" Source="1589204440988.jpg" OpacityMask="#FFB81111" Margin="32,0,0,0"/>
-            <ListBox x:Name="ListBox_manhua" Margin="0,23,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="{x:Null}" Foreground="White" RenderTransformOrigin="0.485,0.504"/>
-        </Grid>
-        <Grid x:Name="Grid_browse" HorizontalAlignment="Left" VerticalAlignment="Top" >
-            
+            <Grid x:Name="Grid_menu" Margin="-71,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Height="212" >
+            </Grid>
+            <Grid x:Name="Grid_browse" HorizontalAlignment="Left" VerticalAlignment="Top" >
+
         </Grid>
     </Grid>
 </Window>
