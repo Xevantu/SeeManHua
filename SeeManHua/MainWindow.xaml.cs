@@ -47,6 +47,8 @@ namespace SeeManHua
             #endregion
 
             #region 觀賞區
+            Grid_browse.HorizontalAlignment = HorizontalAlignment.Left;
+            Grid_browse.VerticalAlignment = VerticalAlignment.Top;
             Grid_browse.Margin = new Thickness(Grid_menu.Width, 0, 0, 0);
             Grid_browse.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
             #endregion
@@ -66,8 +68,6 @@ namespace SeeManHua
             //觀賞區布置
             Grid_browse.Width = winW * 0.5;
             Grid_browse.Height = winH;
-            //browsePage = new BrowsePage(Grid_browse, brPageSetting);
-            //searchList = new SearchList(main_bg, TextBox_search, Image_searchIcon, Grid_menu);
         }
 
         /// <summary>

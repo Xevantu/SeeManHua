@@ -11,7 +11,7 @@ namespace SeeManHua
     {
         BitmapImage bimg;
         string name, intro, startRead;
-        object btnChapter, author, sort;
+        object btnChapter = null, author = null, sort = null;
 
         public BitmapImage Bimg { get => bimg; set => bimg = value; }
         public object BtnChapter { get => btnChapter; set => btnChapter = value; }

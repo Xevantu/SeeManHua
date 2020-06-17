@@ -1,17 +1,9 @@
 ﻿using HtmlAgilityPack;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Input.StylusPlugIns;
 using System.Windows.Media;
-using System.Windows.Media.Converters;
-using System.Windows.Media.Imaging;
 
 namespace SeeManHua
 {
@@ -30,17 +22,24 @@ namespace SeeManHua
         /// 外框高度與字元大小的係數
         /// </summary>
         double fsCoefficient = 0.6, fsOffset = 5;
-        public BrowsePage() { }
+        /// <summary> CoverPropHW = CoverProportionHW
+        /// <para>圖片長寬比，因部分圖片下載後長寬不一，造成排版變形，所以統一比例尺(Proportion)。</para>
+        /// </summary>
+        double CoverPropHW = 1.333;
+        TextBox tb_SearchBar = new TextBox();
 
-        public BrowsePage(Grid tGrid, BrowsePageSetting brPageSetting)
+        public BrowsePage(object sender, Grid tGrid, BrowsePageSetting brPageSetting)
         {
+            tb_SearchBar = (TextBox)sender;
             tGrid.Children.Clear();
             Image imgCover = new Image
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
+                //填滿圖片框
+                Stretch = Stretch.UniformToFill,
                 Margin = new Thickness(2),
-                Height = CoverW * brPageSetting.Bimg.Height / brPageSetting.Bimg.Width,
+                Height = CoverW * CoverPropHW,
                 Width = CoverW,
                 Source = brPageSetting.Bimg
             };
@@ -63,58 +62,64 @@ namespace SeeManHua
 
             HtmlNodeCollection list_author = (HtmlNodeCollection)brPageSetting.Author;
             Label lbAuthor = new Label();
-            double AuthorW = 0;
-            for (int i = 0; i < list_author.Count; i++)
+            if (list_author != null)
             {
-                lbAuthor = new Label
+                double AuthorW = 0;
+                for (int i = 0; i < list_author.Count; i++)
                 {
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
-                    //BorderThickness = new Thickness(0.6),
-                    //BorderBrush = new SolidColorBrush(Color.FromArgb(100, 150, 0, 0)),
-                    Height = imgCover.Height * 0.15,
-                    Uid = list_author[i].Attributes["href"].Value
-                };
-                lbAuthor.FontSize = lbAuthor.Height * fsCoefficient;
-                lbAuthor.Width = list_author[i].InnerText.Length * lbAuthor.FontSize * widthCoefficient + fsOffset;
-                lbAuthor.Margin = new Thickness(lbName.Margin.Left + AuthorW + 5, lbName.Margin.Top + lbName.Height + 5, 0, 0);
-                AuthorW += lbAuthor.Width + 5;
-                lbAuthor.Content = list_author[i].InnerText;
-                lbAuthor.AddHandler(UIElement.MouseEnterEvent, new MouseEventHandler(Label_MouseEnter), true);
-                lbAuthor.AddHandler(UIElement.MouseLeaveEvent, new MouseEventHandler(Label_MouseLeave), true);
-                lbAuthor.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LabelAuthor_MouseLeftButtonDown), true);
-                tGrid.Children.Add(lbAuthor);
+                    lbAuthor = new Label
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        HorizontalContentAlignment = HorizontalAlignment.Left,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
+                        //BorderThickness = new Thickness(0.6),
+                        //BorderBrush = new SolidColorBrush(Color.FromArgb(100, 150, 0, 0)),
+                        Height = imgCover.Height * 0.15,
+                        Uid = list_author[i].Attributes["href"].Value
+                    };
+                    lbAuthor.FontSize = lbAuthor.Height * fsCoefficient;
+                    lbAuthor.Width = list_author[i].InnerText.Length * lbAuthor.FontSize * widthCoefficient + fsOffset;
+                    lbAuthor.Margin = new Thickness(lbName.Margin.Left + AuthorW + 5, lbName.Margin.Top + lbName.Height + 5, 0, 0);
+                    AuthorW += lbAuthor.Width + 5;
+                    lbAuthor.Content = list_author[i].InnerText;
+                    lbAuthor.AddHandler(UIElement.MouseEnterEvent, new MouseEventHandler(Label_MouseEnter), true);
+                    lbAuthor.AddHandler(UIElement.MouseLeaveEvent, new MouseEventHandler(Label_MouseLeave), true);
+                    lbAuthor.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LabelAuthor_MouseLeftButtonDown), true);
+                    tGrid.Children.Add(lbAuthor);
+                }
             }
 
             HtmlNodeCollection list_sort = (HtmlNodeCollection)brPageSetting.Sort;
             Label lbSort = new Label();
-            double SortW = 0;
-            for (int i = 0; i < list_sort.Count; i++)
+            if (list_sort != null)
             {
-                lbSort = new Label
+                double SortW = 0;
+                for (int i = 0; i < list_sort.Count; i++)
                 {
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
-                    //BorderThickness = new Thickness(0.6),
-                    //BorderBrush = new SolidColorBrush(Color.FromArgb(100, 150, 0, 0)),
-                    Height = imgCover.Height * 0.15,
-                    Uid = list_sort[i].Attributes["href"].Value
-                };
-                lbSort.FontSize = lbSort.Height * fsCoefficient;
-                lbSort.Width = list_sort[i].InnerText.Length * lbSort.FontSize * widthCoefficient + fsOffset;
-                lbSort.Margin = new Thickness(lbName.Margin.Left + SortW + 5, lbAuthor.Margin.Top + lbAuthor.Height + 5, 0, 0);
-                SortW += lbSort.Width + 5;
-                lbSort.Content = list_sort[i].InnerText;
-                lbSort.AddHandler(UIElement.MouseEnterEvent, new MouseEventHandler(Label_MouseEnter), true);
-                lbSort.AddHandler(UIElement.MouseLeaveEvent, new MouseEventHandler(Label_MouseLeave), true);
-                lbSort.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LabelSort_MouseLeftButtonDown), true);
-                tGrid.Children.Add(lbSort);
+                    lbSort = new Label
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        HorizontalContentAlignment = HorizontalAlignment.Left,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Foreground = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)),
+                        //BorderThickness = new Thickness(0.6),
+                        //BorderBrush = new SolidColorBrush(Color.FromArgb(100, 150, 0, 0)),
+                        Height = imgCover.Height * 0.15,
+                        Uid = list_sort[i].Attributes["href"].Value
+                    };
+                    lbSort.FontSize = lbSort.Height * fsCoefficient;
+                    lbSort.Width = list_sort[i].InnerText.Length * lbSort.FontSize * widthCoefficient + fsOffset;
+                    lbSort.Margin = new Thickness(lbName.Margin.Left + SortW + 5, lbAuthor.Margin.Top + lbAuthor.Height + 5, 0, 0);
+                    SortW += lbSort.Width + 5;
+                    lbSort.Content = list_sort[i].InnerText;
+                    lbSort.AddHandler(UIElement.MouseEnterEvent, new MouseEventHandler(Label_MouseEnter), true);
+                    lbSort.AddHandler(UIElement.MouseLeaveEvent, new MouseEventHandler(Label_MouseLeave), true);
+                    lbSort.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LabelSort_MouseLeftButtonDown), true);
+                    tGrid.Children.Add(lbSort);
+                }
             }
 
             TextBox tbIntro = new TextBox
@@ -162,8 +167,23 @@ namespace SeeManHua
              * row |
              * col -
              */
+            ScrollViewer svChapter = new ScrollViewer
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, btnStartRead.Margin.Top + btnStartRead.Height, 0, 0),
+                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                Width = tGrid.Width,
+                Height = tGrid.Height - btnStartRead.Margin.Top,
+            };
+            Grid chGrid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = tGrid.Width
+            };
             HtmlNodeCollection chapterItem = (HtmlNodeCollection)brPageSetting.BtnChapter;
-            int row, col;
+            int row = 0, col = 0;
             double ChapterItemH = ChapterItemFS * 2;
             double ChapterItemW = tGrid.Width * 0.25;
             double ChapterItemDistance = tGrid.Width * 0.06;
@@ -180,9 +200,8 @@ namespace SeeManHua
                     Foreground = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)),
                     Background = new SolidColorBrush(Color.FromArgb(80, 200, 200, 200)),
                     BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
-                    Margin = new Thickness((ChapterItemW + ChapterItemDistance) * row + ChapterItemDistance, btnStartRead.Margin.Top + btnStartRead.Height + (ChapterItemH + 5) * col + 10, 0, 0),
+                    Margin = new Thickness((ChapterItemW + ChapterItemDistance) * row + ChapterItemDistance, (ChapterItemH + 5) * col + 10, 0, 0),
                     BorderThickness = new Thickness(0),
-                    
                     Height = ChapterItemH,
                     Width = ChapterItemW,
                     FontSize = ChapterItemFS,
@@ -190,9 +209,13 @@ namespace SeeManHua
                     Uid = chapterItem[i].SelectSingleNode("a").Attributes["href"].Value
                 };
                 button.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(BtnChapter_MouseLeftButtonDown), true);
-                tGrid.Children.Add(button);
+                chGrid.Children.Add(button);
             }
+            chGrid.Height = (ChapterItemH + 5) * (col + 2) + 10;
+            svChapter.Content = chGrid;
+            tGrid.Children.Add(svChapter);
         }
+
         private void Label_MouseEnter(object sender, MouseEventArgs e)
         {
             Label label = (Label)sender;
@@ -206,11 +229,13 @@ namespace SeeManHua
         private void LabelAuthor_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Label label = (Label)sender;
+            tb_SearchBar.Text = label.Content.ToString();
             Console.WriteLine(label.Uid);
         }
         private void LabelSort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Label label = (Label)sender;
+            tb_SearchBar.Text = label.Content.ToString();
             Console.WriteLine(label.Uid);
         }
         private void BtnStartRead_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

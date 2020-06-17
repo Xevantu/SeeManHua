@@ -7,6 +7,8 @@
 2.搜尋頁(Grid_manhua_menu)
 2-1.佈局搜尋列()
 +包含搜尋條、搜尋圖示、結果輸出(圖片、名稱、簡介、分類、連載狀態)
+Sort:	/html/body/ul/li[8]/div[2]/p/a	<=  list	=>  Attribute[span]
+Status:	/html/body/ul/li[8]/div[2]/p/span	=>  InnerText
 2-2.賦予功能屬性(FucntionSearch)
 +結果選取: 要在子頁面輸出鏈結內容
 +搜尋圖示: 點選可以搜尋，並於下方排列搜尋結果
